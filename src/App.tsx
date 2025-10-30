@@ -8,8 +8,8 @@ import AddAuthorForm from "./components/tabs/AddAuthorForm"
 import AddBookForm from "./components/tabs/AddBookForm"
 import type { Author } from "./types/Authors"
 import type { Book } from "./types/Book"
-import { getAllBooks, createBook, deleteBook } from "./services/booksService"
-import { getAllAuthors, createAuthor, deleteAuthor } from "./services/authorsService"
+import { getAllBooks, createBook } from "./services/booksService"
+import { getAllAuthors, createAuthor } from "./services/authorsService"
 
 const App = () => {
 	// State
@@ -76,47 +76,6 @@ const App = () => {
 		} catch (err) {
 			setError(err instanceof Error ? err.message : "Failed to add book")
 			console.error("Error adding book:", err)
-		}
-	}
-
-	const handleDeleteBook = async (id: number) => {
-		if (!window.confirm("Are you sure you want to delete this book?")) {
-			return
-		}
-
-		try {
-			setError(null)
-			await deleteBook(id)
-			setBooks(books.filter(book => book.id !== id))
-			setSuccessMessage("Book deleted successfully!")
-			setTimeout(() => setSuccessMessage(null), 3000)
-		} catch (err) {
-			setError(err instanceof Error ? err.message : "Failed to delete book")
-			console.error("Error deleting book:", err)
-		}
-	}
-
-	const handleDeleteAuthor = async (id: number) => {
-		// Check if author has books
-		const authorBooks = books.filter(book => book.authorId === id)
-		if (authorBooks.length > 0) {
-			setError("Cannot delete author with existing books. Please delete the books first.")
-			return
-		}
-
-		if (!window.confirm("Are you sure you want to delete this author?")) {
-			return
-		}
-
-		try {
-			setError(null)
-			await deleteAuthor(id)
-			setAuthors(authors.filter(author => author.id !== id))
-			setSuccessMessage("Author deleted successfully!")
-			setTimeout(() => setSuccessMessage(null), 3000)
-		} catch (err) {
-			setError(err instanceof Error ? err.message : "Failed to delete author")
-			console.error("Error deleting author:", err)
 		}
 	}
 
